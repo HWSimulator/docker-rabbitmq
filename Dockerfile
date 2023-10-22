@@ -1,5 +1,12 @@
+FROM rabbitmq:3.12-management-alpine AS builder
+
+RUN apk update; \
+    apk add curl; \
+    curl -L https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.12.0/rabbitmq_delayed_message_exchange-3.12.0.ez > $RABBITMQ_HOME/plugins/rabbitmq_delayed_message_exchange-3.12.0.ez;
+    
 FROM rabbitmq:3.12-management-alpine
 
+COPY --from=builder $RABBITMQ_HOME/plugins/rabbitmq_delayed_message_exchange-3.12.0.ez $RABBITMQ_HOME/plugins/rabbitmq_delayed_message_exchange-3.12.0.ez
 RUN apk update; \
     apk add curl; \
     curl -L https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/v3.12.0/rabbitmq_delayed_message_exchange-3.12.0.ez > $RABBITMQ_HOME/plugins/rabbitmq_delayed_message_exchange-3.12.0.ez; \
